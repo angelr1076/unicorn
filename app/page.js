@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import ButtonLogin from '@/components/ButtonLogin';
+import Button from '/components/Button';
 
 export default function Home() {
   return (
@@ -9,7 +9,9 @@ export default function Home() {
         Create a feedback board for your product, share it with your customers,
         and prioritize what to build next based on real user insights.
       </div>
-      <ButtonLogin />
+      <Button outline color='primary' href='/dashboard'>
+        Dashboard
+      </Button>
     </main>
   );
 }
