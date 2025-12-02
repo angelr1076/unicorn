@@ -18,8 +18,12 @@ export default function Home() {
         <div className='max-w-3xl mx-auto flex justify-between items-center px-8 py-2'>
           <div className='font-bold'>Unicorn SaaS</div>
           <div className='space-x-4 max-md:hidden'>
-            <a className='link link-hover'>Pricing</a>
-            <a className='link link-hover'>FAQ</a>
+            <a className='link link-hover' href='#pricing'>
+              Pricing
+            </a>
+            <a className='link link-hover' href='#faq'>
+              FAQ
+            </a>
           </div>
           <Button
             href={isLoggedIn ? '/dashboard' : '/login'}
@@ -47,7 +51,7 @@ export default function Home() {
         </Button>
       </section>
       {/* PRICING */}
-      <section className='bg-base-200 py-32'>
+      <section className='bg-base-200 py-32' id='pricing'>
         <div className='px-8 py-32 max-w-3xl mx-auto'>
           <p className='text-sm uppercase font-medium text-primary mb-4 text-center'>
             Pricing
@@ -78,7 +82,7 @@ export default function Home() {
         </div>
       </section>
       {/* FAQ */}
-      <section className='bg-base-200 py-32'>
+      <section className='bg-base-200 py-32' id='faq'>
         <div className='px-8 py-32 max-w-3xl mx-auto'>
           <p className='text-sm uppercase font-medium text-primary mb-4 text-center'>
             FAQ
