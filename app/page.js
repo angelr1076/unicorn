@@ -1,6 +1,8 @@
 import Button from '/components/Button';
 import ListItem from '/components/ListItem';
 import FAQListItem from '/components/FAQListItem';
+import Image from 'next/image';
+import productDemo from './productDemo.jpeg';
 
 export default function Home() {
   const isLoggedIn = false;
@@ -15,7 +17,7 @@ export default function Home() {
     <main>
       {/* HEADER */}
       <section className='bg-base-200'>
-        <div className='max-w-3xl mx-auto flex justify-between items-center px-8 py-2'>
+        <div className='max-w-5xl mx-auto flex justify-between items-center px-8 py-2'>
           <div className='font-bold'>Unicorn SaaS</div>
           <div className='space-x-4 max-md:hidden'>
             <a className='link link-hover' href='#pricing'>
@@ -34,21 +36,28 @@ export default function Home() {
         </div>
       </section>
       {/* HERO */}
-      <section className='text-center px-8 py-32 max-w-3xl mx-auto'>
-        <h1 className='text-4xl lg:text-5xl font-extrabold mb-6'>
-          Collect customer feedback to build a better product
-        </h1>
-        <div className='opacity-90 mb-6'>
-          Create a feedback board for your product, share it with your
-          customers, and prioritize what to build next based on real user
-          insights.
+      <section className='flex flex-col lg:flex-row gap-14 items-center lg:items-start text-center lg:text-left px-8 py-32 max-w-5xl mx-auto'>
+        <Image
+          src={productDemo}
+          alt='Product Demo'
+          className='w-96 rounded-xl'
+        />
+        <div>
+          <h1 className='text-4xl lg:text-5xl font-extrabold mb-6'>
+            Collect customer feedback to build a better product
+          </h1>
+          <div className='opacity-90 mb-6'>
+            Create a feedback board for your product, share it with your
+            customers, and prioritize what to build next based on real user
+            insights.
+          </div>
+          <Button
+            href={isLoggedIn ? '/dashboard' : '/login'}
+            color='primary'
+            size='lg'>
+            {isLoggedIn ? 'Dashboard' : 'Login'}
+          </Button>
         </div>
-        <Button
-          href={isLoggedIn ? '/dashboard' : '/login'}
-          color='primary'
-          size='lg'>
-          {isLoggedIn ? 'Dashboard' : 'Login'}
-        </Button>
       </section>
       {/* PRICING */}
       <section className='bg-base-200 py-32' id='pricing'>
