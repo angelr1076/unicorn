@@ -9,7 +9,7 @@ export default function Dashboard() {
       <h1>Private Dashboard</h1>
       <Link href='/'>Go back home</Link>
       <Button
-        href={isLoggedIn ? '/dashboard' : '/login'}
+        href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}
         color='secondary'
         size='lg'>
         {isLoggedIn ? 'Dashboard' : 'Login'}

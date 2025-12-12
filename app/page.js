@@ -28,7 +28,7 @@ export default function Home() {
             </a>
           </div>
           <Button
-            href={isLoggedIn ? '/dashboard' : '/login'}
+            href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}
             color='primary'
             size='lg'>
             {isLoggedIn ? 'Dashboard' : 'Login'}
