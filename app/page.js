@@ -1,4 +1,4 @@
-import Button from '@/components/Button';
+import ButtonLogin from '@/components/ButtonLogin';
 import ListItem from '@/components/ListItem';
 import FAQListItem from '@/components/FAQListItem';
 import Image from 'next/image';
@@ -7,7 +7,6 @@ import { auth } from '@/auth';
 
 export default async function Home() {
   const session = await auth();
-  const isLoggedIn = !!session;
 
   const pricingFeatureList = [
     'Unlimited feedback boards',
@@ -32,9 +31,7 @@ export default async function Home() {
             </a>
           </div>
 
-          <Button href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}>
-            {isLoggedIn ? 'Dashboard' : 'Login'}
-          </Button>
+          <ButtonLogin session={session} />
         </div>
       </section>
 
@@ -45,18 +42,18 @@ export default async function Home() {
           alt='Product Demo'
           className='w-96 rounded-xl'
         />
+
         <div>
           <h1 className='text-4xl font-extrabold mb-6'>
             Collect customer feedback to build a better product
           </h1>
+
           <p className='opacity-90 mb-6'>
             Create a feedback board, share it, and prioritize what to build
             next.
           </p>
 
-          <Button href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}>
-            {isLoggedIn ? 'Go to Dashboard' : 'Get Started'}
-          </Button>
+          <ButtonLogin session={session} extraStyle='btn-lg' />
         </div>
       </section>
 
@@ -72,11 +69,7 @@ export default async function Home() {
               ))}
             </ul>
 
-            <Button
-              href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}
-              className='w-full mt-6'>
-              {isLoggedIn ? 'Dashboard' : 'Login'}
-            </Button>
+            <ButtonLogin session={session} extraStyle='w-full mt-6' />
           </div>
         </div>
       </section>

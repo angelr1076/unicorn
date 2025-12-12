@@ -1,14 +1,9 @@
 import { auth, signOut } from '@/auth';
-import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import ButtonLogout from '@/components/ButtonLogout';
 
 export default async function Dashboard() {
   const session = await auth();
-
-  // Protect the dashboard
-  if (!session) {
-    redirect('/api/auth/signin');
-  }
 
   const user = session.user;
 
@@ -19,20 +14,14 @@ export default async function Dashboard() {
         <header className='flex items-center justify-between mb-10'>
           <h1 className='text-3xl font-bold'>Dashboard</h1>
 
-          <form
-            action={async () => {
-              'use server';
-              await signOut({ redirectTo: '/' });
-            }}>
-            <button className='btn btn-outline btn-error'>Sign out</button>
-          </form>
+          <ButtonLogout />
         </header>
 
         {/* User Card */}
         <section className='bg-base-100 rounded-2xl p-6 shadow mb-8'>
           <h2 className='text-xl font-semibold mb-2'>Your Account</h2>
           <p className='opacity-80'>
-            Signed in as <strong>{user?.email}</strong>
+            Signed in as <strong>{user?.name || 'friend'}</strong>
           </p>
         </section>
 
