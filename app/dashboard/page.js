@@ -1,4 +1,4 @@
-import { auth, signOut } from '@/auth';
+import { auth } from '@/auth';
 import Link from 'next/link';
 import ButtonLogout from '@/components/ButtonLogout';
 
