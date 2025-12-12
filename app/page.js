@@ -1,11 +1,14 @@
-import Button from '/components/Button';
-import ListItem from '/components/ListItem';
-import FAQListItem from '/components/FAQListItem';
+import Button from '@/components/Button';
+import ListItem from '@/components/ListItem';
+import FAQListItem from '@/components/FAQListItem';
 import Image from 'next/image';
 import productDemo from './productDemo.jpeg';
+import { auth } from '@/auth';
 
-export default function Home() {
-  const isLoggedIn = false;
+export default async function Home() {
+  const session = await auth();
+  const isLoggedIn = !!session;
+
   const pricingFeatureList = [
     'Unlimited feedback boards',
     'Custom domains',
@@ -19,6 +22,7 @@ export default function Home() {
       <section className='bg-base-200'>
         <div className='max-w-5xl mx-auto flex justify-between items-center px-8 py-2'>
           <div className='font-bold'>Unicorn SaaS</div>
+
           <div className='space-x-4 max-md:hidden'>
             <a className='link link-hover' href='#pricing'>
               Pricing
@@ -27,94 +31,66 @@ export default function Home() {
               FAQ
             </a>
           </div>
-          <Button
-            href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}
-            color='primary'
-            size='lg'>
+
+          <Button href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}>
             {isLoggedIn ? 'Dashboard' : 'Login'}
           </Button>
         </div>
       </section>
+
       {/* HERO */}
-      <section className='flex flex-col lg:flex-row gap-14 items-center lg:items-start text-center lg:text-left px-8 py-32 max-w-5xl mx-auto'>
+      <section className='flex flex-col lg:flex-row gap-14 items-center px-8 py-32 max-w-5xl mx-auto'>
         <Image
           src={productDemo}
           alt='Product Demo'
           className='w-96 rounded-xl'
         />
         <div>
-          <h1 className='text-4xl lg:text-5xl font-extrabold mb-6'>
+          <h1 className='text-4xl font-extrabold mb-6'>
             Collect customer feedback to build a better product
           </h1>
-          <div className='opacity-90 mb-6'>
-            Create a feedback board for your product, share it with your
-            customers, and prioritize what to build next based on real user
-            insights.
-          </div>
-          <Button
-            href={isLoggedIn ? '/dashboard' : '/login'}
-            color='primary'
-            size='lg'>
-            {isLoggedIn ? 'Dashboard' : 'Login'}
+          <p className='opacity-90 mb-6'>
+            Create a feedback board, share it, and prioritize what to build
+            next.
+          </p>
+
+          <Button href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}>
+            {isLoggedIn ? 'Go to Dashboard' : 'Get Started'}
           </Button>
         </div>
       </section>
+
       {/* PRICING */}
       <section className='bg-base-200 py-32' id='pricing'>
-        <div className='px-8 py-32 max-w-3xl mx-auto'>
-          <p className='text-sm uppercase font-medium text-primary mb-4 text-center'>
-            Pricing
-          </p>
-          <h2 className='text-center text-3xl lg:text-4xl font-extrabold mb-12'>
-            A pricing that adapts to your needs
-          </h2>
-          <div className='p-8 bg-base-100 max-w-96 rounded-3xl mx-auto space-y-6'>
-            <div className='flex gap-2 items-baseline'>
-              <div className='text-4xl font-black'>$19</div>
-              <div className='uppercase text-sm font-medium opacity-60'>
-                /month
-              </div>
-            </div>
+        <div className='max-w-3xl mx-auto px-8'>
+          <h2 className='text-center text-4xl font-extrabold mb-12'>Pricing</h2>
+
+          <div className='p-8 bg-base-100 max-w-96 rounded-3xl mx-auto'>
             <ul className='space-y-2'>
-              {pricingFeatureList.map(feature => (
-                <ListItem key={feature}>{feature}</ListItem>
+              {pricingFeatureList.map(f => (
+                <ListItem key={f}>{f}</ListItem>
               ))}
             </ul>
+
             <Button
-              href={isLoggedIn ? '/dashboard' : '/login'}
-              color='primary'
-              size=''
-              className='btn w-full mt-4'>
+              href={isLoggedIn ? '/dashboard' : '/api/auth/signin'}
+              className='w-full mt-6'>
               {isLoggedIn ? 'Dashboard' : 'Login'}
             </Button>
           </div>
         </div>
       </section>
+
       {/* FAQ */}
       <section className='bg-base-200 py-32' id='faq'>
-        <div className='px-8 py-32 max-w-3xl mx-auto'>
-          <p className='text-sm uppercase font-medium text-primary mb-4 text-center'>
-            FAQ
-          </p>
-          <h2 className='text-3xl lg:text-4xl font-extrabold mb-12 text-center'>
-            Frequently Asked Questions
-          </h2>
-          <ul className='max-w-lg mx-auto'>
+        <div className='max-w-3xl mx-auto px-8'>
+          <h2 className='text-center text-4xl font-extrabold mb-12'>FAQ</h2>
+          <ul>
             {[
+              { question: 'Can I change my plan?', answer: 'Yes.' },
               {
-                question: 'Can I change my plan later?',
-                answer:
-                  'Yes, you can upgrade or downgrade your plan at any time from your account settings.',
-              },
-              {
-                question: 'What payment methods do you accept?',
-                answer:
-                  'We accept all major credit cards including Visa, MasterCard, American Express, and Discover.',
-              },
-              {
-                question: 'Is there a discount for annual subscriptions?',
-                answer:
-                  'Yes, we offer a 20% discount for annual subscriptions paid upfront.',
+                question: 'What payments are accepted?',
+                answer: 'All major cards.',
               },
             ].map(qa => (
               <FAQListItem key={qa.question} qa={qa} />

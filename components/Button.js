@@ -1,17 +1,15 @@
-import React from 'react';
 import Link from 'next/link';
 import clsx from 'clsx';
 
-const Button = ({
+export default function Button({
   href,
   children,
   color = 'primary',
   size = 'md',
   outline = false,
   className = '',
-  onClick,
   ...props
-}) => {
+}) {
   const styles = clsx(
     'btn',
     `btn-${color}`,
@@ -20,19 +18,9 @@ const Button = ({
     className
   );
 
-  if (href) {
-    return (
-      <Link href={href} className={styles} {...props}>
-        {children}
-      </Link>
-    );
-  }
-
   return (
-    <button className={styles} onClick={onClick} {...props}>
+    <Link href={href} className={styles} {...props}>
       {children}
-    </button>
+    </Link>
   );
-};
-
-export default Button;
+}
