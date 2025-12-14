@@ -8,7 +8,7 @@ const ButtonLogin = ({ session, extraStyle = '' }) => {
 
   if (session) {
     return (
-      <Link href={dashboardUrl} className={`btn btn-primary ${extraStyle}`}>
+      <Link href={dashboardUrl} className={`btn btn-secondary ${extraStyle}`}>
         Go to dashboard
       </Link>
     );

@@ -69,7 +69,10 @@ export default async function Home() {
               ))}
             </ul>
 
-            <ButtonLogin session={session} extraStyle='w-full mt-6' />
+            <ButtonLogin
+              session={session}
+              extraStyle='btn btn-wide w-full mt-6'
+            />
           </div>
         </div>
       </section>
