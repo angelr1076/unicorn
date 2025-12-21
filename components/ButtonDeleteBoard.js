@@ -17,6 +17,7 @@ const ButtonDeleteBoard = ({ boardId }) => {
         await axios.delete(`/api/board?boardId=${boardId}`);
         toast.success('Board deleted successfully.');
         router.push('/dashboard');
+        router.refresh();
       }
     } catch (error) {
       const errorMessage =
