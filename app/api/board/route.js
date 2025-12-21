@@ -1,40 +1,42 @@
 import { auth } from '@/auth';
 import connectDB from '@/libs/mongoose';
 import Board from '@/models/Board';
+import { NextResponse } from 'next/server';
 
-export async function POST(req) {
+export async function DELETE(req) {
   try {
-    const session = await auth();
+    const { searchParams } = req.nextUrl;
+    const boardId = searchParams.get('boardId');
 
-    if (!session?.user?.id) {
-      return new Response('Unauthorized', { status: 401 });
+    if (!boardId) {
+      return NextResponse.json(
+        { error: 'Board ID is required.' },
+        { status: 400 }
+      );
     }
 
-    const { name, description } = await req.json();
-
-    if (!name || !description) {
-      return new Response(
-        JSON.stringify({ error: 'Name and description are required.' }),
-        {
-          status: 400,
-        }
-      );
+    const session = await auth();
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
     }
 
     await connectDB();
 
-    const board = await Board.create({
+    const result = await Board.deleteOne({
+      _id: boardId,
       userId: session.user.id,
-      name,
-      description,
     });
 
-    return new Response(JSON.stringify(board), { status: 201 });
-  } catch (error) {
-    console.error('Create board error:', error);
+    if (result.deletedCount === 0) {
+      return NextResponse.json({ error: 'Board not found.' }, { status: 404 });
+    }
 
-    return new Response(JSON.stringify({ error: 'Failed to create board.' }), {
-      status: 500,
-    });
+    return NextResponse.json({ message: 'Board deleted successfully.' });
+  } catch (e) {
+    console.error('Delete board error:', e);
+    return NextResponse.json(
+      { error: 'Failed to delete board.' },
+      { status: 500 }
+    );
   }
 }

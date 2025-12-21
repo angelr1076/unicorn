@@ -5,6 +5,7 @@ import FormNewBoard from '@/components/FormNewBoard';
 import connectDB from '@/libs/mongoose';
 import User from '@/models/User';
 import Board from '@/models/Board';
+import ButtonDeleteBoard from '@/components/ButtonDeleteBoard';
 import { redirect } from 'next/navigation';
 
 async function getUser() {
@@ -62,13 +63,15 @@ export default async function Dashboard() {
                     <div
                       key={board._id}
                       className='bg-base-100 rounded-xl p-4 shadow
-                        hover:shadow-md transition'>
-                      <h4 className='font-semibold'>{board.name}</h4>
+                        hover:shadow-lg transition-shadow duration-200'>
                       {board.description && (
                         <p className='text-sm opacity-70 mt-1'>
                           {board.description}
                         </p>
                       )}
+                      <Link href={`/dashboard/b/${board._id}`}>
+                        {board.name}
+                      </Link>
                     </div>
                   ))}
 
