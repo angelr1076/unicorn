@@ -1,51 +1,51 @@
 import { auth } from '@/auth';
-import Link from 'next/link';
-import ButtonLogout from '@/components/ButtonLogout';
-import FormNewBoard from '@/components/FormNewBoard';
 import connectDB from '@/libs/mongoose';
 import User from '@/models/User';
 import Board from '@/models/Board';
-import ButtonDeleteBoard from '@/components/ButtonDeleteBoard';
 import { redirect } from 'next/navigation';
+
+import ButtonCheckout from '@/components/ButtonCheckout';
+import ButtonPortal from '@/components/ButtonPortal';
+import ButtonLogout from '@/components/ButtonLogout';
+import FormNewBoard from '@/components/FormNewBoard';
+import Link from 'next/link';
 
 async function getUser() {
   const session = await auth();
-  await connectDB();
+  if (!session?.user?.email) return null;
 
-  return await User.findById(session.user.id).lean();
+  await connectDB();
+  return await User.findOne({ email: session.user.email }).lean();
 }
 
 export default async function Dashboard() {
   const session = await auth();
   if (!session) redirect('/api/auth/signin');
 
-  await connectDB();
+  const user = await getUser();
 
-  const boards = await Board.find({
-    userId: session.user.id,
-  }).lean();
+  await connectDB();
+  const boards = await Board.find({ userId: session.user.id }).lean();
 
   return (
     <main className='min-h-screen bg-base-200'>
       <div className='max-w-5xl mx-auto px-8 py-12'>
-        {/* Header */}
         <header className='flex items-center justify-between mb-10'>
           <h1 className='text-3xl font-bold'>Dashboard</h1>
+          {user?.hasAccess ? <ButtonPortal /> : <ButtonCheckout />}
           <ButtonLogout />
         </header>
 
-        {/* User Card */}
         <section className='bg-base-100 rounded-2xl p-6 shadow mb-8'>
           <h2 className='text-xl font-semibold mb-2'>Your Account</h2>
-          <p className='opacity-80'>
-            Signed in as <strong>{getUser()?.name || 'friend'}</strong>
+          <p>
+            Signed in as <strong>{user?.firstName || 'User'}</strong>
           </p>
         </section>
 
-        {/* App Content */}
-        <section className='bg-base-100 rounded-2xl p-6 shadow mb-8'>
+        <section className='bg-base-100 rounded-2xl p-6 shadow'>
           <div className='flex flex-col md:flex-row gap-6'>
-            {/* Left column: New Board */}
+            {/* Left: New Board */}
             <div className='w-full md:w-1/2'>
               <div className='bg-base-200 p-6 rounded-2xl h-full'>
                 <h3 className='font-semibold mb-4'>New Board</h3>
@@ -53,26 +53,24 @@ export default async function Dashboard() {
               </div>
             </div>
 
-            {/* Right column: Boards */}
+            {/* Right: Boards */}
             <div className='w-full md:w-1/2'>
               <div className='bg-base-200 p-6 rounded-2xl h-full'>
                 <h3 className='font-semibold mb-4'>Boards</h3>
 
-                <div className='flex flex-col gap-4 font-extrabold text-lg '>
+                <div className='flex flex-col gap-4 font-semibold'>
                   {boards.map(board => (
-                    <div
+                    <Link
                       key={board._id}
-                      className='bg-base-100 rounded-xl p-4 shadow
-                        hover:shadow-lg transition-shadow duration-200'>
+                      href={`/dashboard/b/${board._id}`}
+                      className='bg-base-100 rounded-xl p-4 shadow hover:shadow-lg transition-shadow'>
+                      <div className='font-bold'>{board.name}</div>
                       {board.description && (
                         <p className='text-sm opacity-70 mt-1'>
                           {board.description}
                         </p>
                       )}
-                      <Link href={`/dashboard/b/${board._id}`}>
-                        {board.name}
-                      </Link>
-                    </div>
+                    </Link>
                   ))}
 
                   {boards.length === 0 && (
@@ -86,15 +84,10 @@ export default async function Dashboard() {
           </div>
         </section>
 
-        {/* Footer Navigation */}
-        <footer className='flex justify-between items-center'>
-          <Link href='/' className='link link-hover'>
+        <footer className='flex justify-between items-center mt-8'>
+          <Link href='/' className='link'>
             ← Back to homepage
           </Link>
-
-          <span className='text-sm opacity-60'>
-            Unicorn SaaS © {new Date().getFullYear()}
-          </span>
         </footer>
       </div>
     </main>

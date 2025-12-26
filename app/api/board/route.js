@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { auth } from '@/auth';
 import connectDB from '@/libs/mongoose';
 import Board from '@/models/Board';
+import User from '@/models/User';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
@@ -24,6 +25,15 @@ export async function POST(req) {
     }
 
     await connectDB();
+
+    const user = await User.findById(session?.user?.id);
+
+    if (!user.hasAccess) {
+      return NextResponse.json(
+        { error: 'Please subscribe first' },
+        { status: 403 }
+      );
+    }
 
     const board = await Board.create({
       userId: session.user.id,
@@ -59,6 +69,15 @@ export async function DELETE(req) {
     }
 
     await connectDB();
+
+    const user = await User.findById(session?.user?.id);
+
+    if (!user.hasAccess) {
+      return NextResponse.json(
+        { error: 'Please subscribe first' },
+        { status: 403 }
+      );
+    }
 
     const result = await Board.deleteOne({
       _id: boardId,

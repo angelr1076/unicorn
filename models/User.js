@@ -4,12 +4,12 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     trim: true,
-    required: true,
+    default: '',
   },
   lastName: {
     type: String,
     trim: true,
-    required: true,
+    default: '',
   },
   email: {
     type: String,
@@ -25,6 +25,24 @@ const userSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+  hasAccess: {
+    type: Boolean,
+    default: false,
+  },
+  customerId: {
+    type: String,
+    default: '',
+  },
+  planId: {
+    type: String,
+    default: '',
+  },
+
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user',
   },
 });
 
