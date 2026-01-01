@@ -2,9 +2,11 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import connectDB from '@/libs/mongoose';
 import Board from '@/models/Board';
+import Post from '@/models/Post';
 import Link from 'next/link';
 import CardBoardLink from '@/components/CardBoardLink';
 import ButtonDeleteBoard from '@/components/ButtonDeleteBoard';
+import CardPostAdmin from '@/components/CardPostAdmin';
 
 const getBoard = async boardId => {
   const session = await auth();
@@ -18,12 +20,14 @@ const getBoard = async boardId => {
   });
   if (!board) redirect('/dashboard');
 
-  return board;
+  const posts = await Post.find({ boardId }).sort({ createdAt: -1 });
+
+  return { board, posts };
 };
 
 export default async function FeedbackBoard({ params }) {
   const { boardId } = params;
-  const board = await getBoard(boardId);
+  const { board, posts } = await getBoard(boardId);
 
   return (
     <main className='bg-base-200 min-h-screen flex flex-col'>
@@ -49,20 +53,29 @@ export default async function FeedbackBoard({ params }) {
         </div>
       </section>
 
-      {/* Centered Board Header */}
-      <section className='flex-1 flex items-center justify-center bg-base-200'>
-        <div className='text-center bg-base-100 rounded-lg p-20'>
-          <h1 className='text-5xl font-extrabold tracking-tight mb-3'>
+      <section className='flex flex-1 flex-col md:flex-row gap-10 items-start justify-center bg-base-200 px-6 py-12'>
+        <div className='bg-base-100 rounded-xl p-12 text-center max-w-xl w-full sticky top-8'>
+          <h1 className='text-4xl font-extrabold tracking-tight mb-4'>
             {board.name}
           </h1>
+
           {board.description && (
-            <p className='text-xl text-base-content/70 max-w-xl mx-auto'>
+            <p className='text-lg text-base-content/70 mb-6'>
               {board.description}
             </p>
           )}
-          <CardBoardLink boardId={boardId} />
-          <ButtonDeleteBoard boardId={boardId} />
+
+          <div className='space-y-4'>
+            <CardBoardLink boardId={boardId} />
+            <ButtonDeleteBoard boardId={boardId} />
+          </div>
         </div>
+
+        <ul className='space-y-4 w-full max-w-lg'>
+          {posts.map(post => (
+            <CardPostAdmin key={post._id} post={post} boardId={boardId} />
+          ))}
+        </ul>
       </section>
     </main>
   );
