@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { time } from 'node:console';
 
 const postSchema = new mongoose.Schema(
   {
@@ -23,6 +22,10 @@ const postSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
+    },
+    votesCounter: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

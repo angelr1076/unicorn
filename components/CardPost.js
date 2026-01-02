@@ -1,20 +1,33 @@
+import ButtonDeletePost from './ButtonDeletePost';
+import ButtonVote from './ButtonVote';
+
 const CardPost = ({ post }) => {
   return (
-    <li className='bg-base-100 rounded-xl shadow p-5 space-y-3'>
-      <h3 className='text-lg font-semibold leading-tight'>{post.title}</h3>
+    <li className='bg-base-100 rounded-3xl p-6 shadow flex justify-between gap-6'>
+      {/* Left content */}
+      <div className='flex-1 space-y-2'>
+        <h3 className='text-lg font-semibold leading-tight'>{post.title}</h3>
 
-      {post.description && (
-        <div className='text-sm text-base-content/80 leading-relaxed max-h-32 overflow-y-auto pr-1'>
-          {post.description}
+        {post.description && (
+          <div className='text-sm text-base-content/80 leading-relaxed max-h-32 overflow-y-auto pr-2'>
+            {post.description}
+          </div>
+        )}
+
+        <div className='flex items-center gap-4 pt-3'>
+          <span className='text-xs text-base-content/60'>
+            Posted on {new Date(post.createdAt).toLocaleDateString()}
+          </span>
+          <ButtonDeletePost postId={post._id.toString()} />
         </div>
-      )}
+      </div>
 
-      <div className='flex items-center justify-between pt-2'>
-        <span className='text-xs text-base-content/60'>
-          Posted on {new Date(post.createdAt).toLocaleDateString()}
-        </span>
-
-        <button className='btn btn-sm btn-outline'>Button Here</button>
+      {/* Right actions */}
+      <div className='flex items-start'>
+        <ButtonVote
+          postId={post._id.toString()}
+          initialVotes={post.votesCounter ?? 0}
+        />
       </div>
     </li>
   );
