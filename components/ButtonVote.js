@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const ButtonUpvote = ({ postId, initialVotes }) => {
   const localStorageKeyName = `unicorn-hasVoted-${postId}`;
@@ -12,7 +13,7 @@ const ButtonUpvote = ({ postId, initialVotes }) => {
   useEffect(() => {
     const storedValue = localStorage.getItem(localStorageKeyName);
     setHasVoted(storedValue === 'true');
-  }, []);
+  }, [localStorageKeyName]);
 
   const handleVote = async () => {
     if (isVoting || hasVoted) return;
