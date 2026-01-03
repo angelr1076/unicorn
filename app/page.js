@@ -5,6 +5,11 @@ import Image from 'next/image';
 import productDemo from './productDemo.jpeg';
 import { auth } from '@/auth';
 
+export const metadata = {
+  title: 'Unicorn SaaS - Home',
+  description: 'Collect customer feedback to build a better product',
+};
+
 export default async function Home() {
   const session = await auth();
 
@@ -39,7 +44,7 @@ export default async function Home() {
       <section className='flex flex-col lg:flex-row gap-14 items-center px-8 py-32 max-w-5xl mx-auto'>
         <Image
           src={productDemo}
-          alt='Product Demo'
+          alt='A screenshot of the product demo'
           className='w-96 rounded-xl'
         />
 
